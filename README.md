@@ -35,3 +35,22 @@ of the communication constraints.The assumption here is that *a synchronous upda
 communication. There is a fixed set of K clients, each with a fixed local dataset.* At the beginning of each round, a random fraction **C** of clients is selected, and the server sends the current global algorithm state to each of these
 clients. *Only a fraction of clients are selected for efficiency, as experiments show diminishing returns for adding more clients beyond a certain point.* Each selected client then performs local computation based on the global state and its local dataset, and sends an update to the server. The server then applies these updates to its global state, and the process repeats.
 
+### Computational and Communication costs
+   ---
+   In federated optimization communication costs dominate and the reason is as follows:<br>
+   Bandwidth for an upload will be limited by 1 MB/s or less. Further, clients will typically only volunteer to participate in the optimization when they are charged, plugged-in, and on an unmetered wi-fi connection. Further,each client will only participate in a small number of update rounds per day. On the other hand, since any single on-device dataset is small compared to the total dataset size, and modern smartphones have relatively fast processors (including GPUs), computation becomes essentially free compared to communication costs for many model types.
+  
+### Adding more Computation
+ ---
+ This can be done in 2 ways:
+ 
+ - **Increased parallelism**, where we can have more clients working independently between each communication round
+ - **Increased computation on each client**, where rather than performing a simple computation like a gradient calculation, each client performs a more complex calculation between each communication round.
+ 
+ The paper reveals that the speedups achieved are due to adding more computation on each client, once a minimum level of parallelism over clients is used.
+ 
+ ### *FederatedAveraging* Algorithm
+  ---
+      We consider a simple one-shot averaging, where each client solves for the model that minimizes (possibly regularized) loss on their local data, and these models are averaged to produce the final global model.
+      
+  **Applying SGD**:
