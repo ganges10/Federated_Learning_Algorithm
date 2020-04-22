@@ -54,3 +54,6 @@ clients. *Only a fraction of clients are selected for efficiency, as experiments
       We consider a simple one-shot averaging, where each client solves for the model that minimizes (possibly regularized) loss on their local data, and these models are averaged to produce the final global model.
       
   **Applying SGD**:
+   
+   - This approach is computationally efficient, but requires very large numbers of rounds of training to produce good models.
+   - To use large-batch synchronous SGD in the federated setting, we select a **C-fraction of clients on each round**, and compute the gradient of the loss over all the data held by these clients. Thus, C controls the global batch size, with C = 1 corresponding to full-batch (non-stochastic) gradient descent(FederatedSGD).
